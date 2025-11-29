@@ -17,7 +17,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      background: #ffffff;
       margin: 0;
       padding: 20px;
       font-family: 'Roboto', sans-serif;
@@ -34,6 +34,14 @@
       --rotate-y: 0deg;
       --glitter: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.6'/%3E%3C/svg%3E");
       --glittersize: 180px;
+    }
+
+    .cards-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      justify-content: center;
+      align-items: flex-start;
     }
 
     .card-container {
@@ -313,15 +321,14 @@
     }
 
     h1 {
-      color: white;
+      color: #333;
       text-align: center;
       margin-bottom: 30px;
       font-family: 'Roboto Condensed', sans-serif;
-      text-shadow: 0 2px 10px rgba(255, 105, 180, 0.5);
     }
 
     .instructions {
-      color: rgba(255,255,255,0.6);
+      color: #666;
       text-align: center;
       margin-top: 25px;
       font-size: 14px;
@@ -330,8 +337,79 @@
     .subtitle {
       font-size: 10px;
       font-weight: 400;
-      color: rgba(255,255,255,0.6);
+      color: #999;
       margin-left: 5px;
+    }
+
+    /* Gold Border */
+    .gold-border {
+      border-color: rgba(255, 215, 0, 1) !important;
+      box-shadow:
+        inset 0 0 30px rgba(255, 215, 0, 0.3),
+        0 0 15px rgba(255, 215, 0, 0.4) !important;
+    }
+
+    /* Gold/Secret Rare Holographic Effect */
+    .card__shine--gold {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      z-index: 6;
+      pointer-events: none;
+      mix-blend-mode: color-dodge;
+      opacity: var(--card-opacity);
+
+      background-image:
+        var(--glitter),
+        var(--glitter),
+        conic-gradient(
+          hsl(45, 100%, 60%),
+          hsl(40, 100%, 50%),
+          hsl(50, 100%, 70%),
+          hsl(35, 100%, 45%),
+          hsl(45, 100%, 60%)
+        ),
+        radial-gradient(
+          farthest-corner circle at var(--pointer-x) var(--pointer-y),
+          hsla(45, 100%, 70%, .9) 10%,
+          hsla(40, 100%, 40%, .3) 90%
+        );
+
+      background-size: var(--glittersize) var(--glittersize), var(--glittersize) var(--glittersize), cover, cover;
+      background-position: 45% 45%, 55% 55%, center center, center center;
+      background-blend-mode: soft-light, hard-light, overlay;
+      filter: brightness(calc(0.5 + (var(--pointer-from-center) * 0.3))) contrast(1.2) saturate(1.5);
+    }
+
+    .card__shine--gold::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background-image: var(--glitter);
+      background-size: var(--glittersize) var(--glittersize);
+      background-position: calc(50% - (2px * var(--pointer-from-left)) + 1px) calc(50% - (2px * var(--pointer-from-top)) + 1px);
+      filter: brightness(calc((var(--pointer-from-center)*0.6) + 0.6)) contrast(1.5);
+      mix-blend-mode: overlay;
+    }
+
+    .card__glare--gold {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      z-index: 7;
+      pointer-events: none;
+      opacity: calc(var(--pointer-from-center) * 0.7);
+
+      background-image:
+        radial-gradient(
+          farthest-corner circle at var(--pointer-x) var(--pointer-y),
+          hsla(45, 80%, 80%, 0.5) 0%,
+          hsl(35, 60%, 20%) 150%
+        );
+
+      filter: brightness(1.2) contrast(1.4);
+      mix-blend-mode: hard-light;
     }
 
     .download-btn {
@@ -363,8 +441,9 @@
 </head>
 <body>
   <div>
-    <h1>Rachel & Alvin <span class="subtitle">Full Art</span></h1>
+    <h1>Rachel & Alvin <span class="subtitle">Full Art Collection</span></h1>
 
+    <div class="cards-wrapper">
     <div class="card-container">
       <div class="pokemon-card" id="card">
         <div class="card-inner">
@@ -416,47 +495,108 @@
       </div>
     </div>
 
-    <p class="instructions">Move your mouse over the card to see the holographic effect!</p>
-    <button id="download" class="download-btn">Download High-Res PNG</button>
+    <!-- Second Card - Gold/Secret Rare Effect -->
+    <div class="card-container">
+      <div class="pokemon-card gold-card" id="card2">
+        <div class="card-inner">
+          <div class="card-bg"><img src="rachel-alvin-2.png" alt="Rachel & Alvin" crossorigin="anonymous"></div>
+          <div class="card-overlay"></div>
+          <div class="card-border gold-border"></div>
+
+          <div class="card-header">
+            <span class="card-name">Rachel & Alvin</span>
+            <div class="card-hp">
+              HP <span>200</span>
+              <div class="type-badge">❤️</div>
+            </div>
+          </div>
+
+          <div class="card-attacks">
+            <div class="attack">
+              <div class="attack-cost">
+                <span class="energy">❤️</span>
+                <span class="energy">❤️</span>
+              </div>
+              <div class="attack-info">
+                <div class="attack-name">Date Night</div>
+                <div class="attack-desc">Let's go to Metrotown at 10am.</div>
+              </div>
+              <div class="attack-damage">80</div>
+            </div>
+
+            <div class="attack">
+              <div class="attack-cost">
+                <span class="energy">❤️</span>
+              </div>
+              <div class="attack-info">
+                <div class="attack-name">Late Night Cheesecake</div>
+                <div class="attack-desc">Quick stop to our favorite cheesecake cafe.</div>
+              </div>
+              <div class="attack-damage">40</div>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <span>weakness: None &nbsp; | &nbsp; resistance: Everything</span>
+            <span>retreat: Never</span>
+          </div>
+
+          <div class="card__shine card__shine--gold"></div>
+          <div class="card__glare card__glare--gold"></div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <p class="instructions">Move your mouse over the cards to see the holographic effects!</p>
+    <button id="download" class="download-btn">Download Cards</button>
   </div>
 
   <script>
     const card = document.getElementById('card');
+    const card2 = document.getElementById('card2');
 
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
+    // Reusable function for card interaction
+    function setupCardInteraction(cardEl) {
+      cardEl.addEventListener('mousemove', (e) => {
+        const rect = cardEl.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
 
-      const percentX = (x / rect.width) * 100;
-      const percentY = (y / rect.height) * 100;
+        const percentX = (x / rect.width) * 100;
+        const percentY = (y / rect.height) * 100;
 
-      const rotateX = ((y - centerY) / centerY) * 20;
-      const rotateY = ((x - centerX) / centerX) * -20;
+        const rotateX = ((y - centerY) / centerY) * 20;
+        const rotateY = ((x - centerX) / centerX) * -20;
 
-      const distFromCenter = Math.sqrt(
-        Math.pow((percentX - 50) / 50, 2) +
-        Math.pow((percentY - 50) / 50, 2)
-      );
+        const distFromCenter = Math.sqrt(
+          Math.pow((percentX - 50) / 50, 2) +
+          Math.pow((percentY - 50) / 50, 2)
+        );
 
-      card.style.setProperty('--pointer-x', percentX + '%');
-      card.style.setProperty('--pointer-y', percentY + '%');
-      card.style.setProperty('--pointer-from-center', Math.min(distFromCenter, 1));
-      card.style.setProperty('--pointer-from-left', percentX / 100);
-      card.style.setProperty('--pointer-from-top', percentY / 100);
-      card.style.setProperty('--rotate-x', -rotateX + 'deg');
-      card.style.setProperty('--rotate-y', rotateY + 'deg');
-      card.style.setProperty('--card-opacity', '1');
-    });
+        cardEl.style.setProperty('--pointer-x', percentX + '%');
+        cardEl.style.setProperty('--pointer-y', percentY + '%');
+        cardEl.style.setProperty('--pointer-from-center', Math.min(distFromCenter, 1));
+        cardEl.style.setProperty('--pointer-from-left', percentX / 100);
+        cardEl.style.setProperty('--pointer-from-top', percentY / 100);
+        cardEl.style.setProperty('--rotate-x', -rotateX + 'deg');
+        cardEl.style.setProperty('--rotate-y', rotateY + 'deg');
+        cardEl.style.setProperty('--card-opacity', '1');
+      });
 
-    card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--rotate-x', '0deg');
-      card.style.setProperty('--rotate-y', '0deg');
-      card.style.setProperty('--card-opacity', '0');
-      card.style.setProperty('--pointer-from-center', '0');
-    });
+      cardEl.addEventListener('mouseleave', () => {
+        cardEl.style.setProperty('--rotate-x', '0deg');
+        cardEl.style.setProperty('--rotate-y', '0deg');
+        cardEl.style.setProperty('--card-opacity', '0');
+        cardEl.style.setProperty('--pointer-from-center', '0');
+      });
+    }
+
+    // Setup both cards
+    setupCardInteraction(card);
+    setupCardInteraction(card2);
 
     // Download functionality
     document.getElementById('download').addEventListener('click', async () => {
